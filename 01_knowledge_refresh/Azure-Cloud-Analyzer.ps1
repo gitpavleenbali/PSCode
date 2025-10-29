@@ -1,26 +1,86 @@
 # ==============================================================================================
 # 01. Knowledge Refresh: Azure Cloud Resource Analyzer
 # Purpose: Demonstrate PowerShell concepts (Cmdlets, Arrays, Pipeline) using Azure resources
-# Run: Get to the project root and execute: .\01_knowledge_refresh\Azure-Cloud-Analyzer.ps1
+# Run: cd '01_knowledge_refresh' && .\Azure-Cloud-Analyzer.ps1
 # Prerequisites: Azure PowerShell module installed and user logged in Azure (Connect-AzAccount)
 # ==============================================================================================
 
 
 Write-Host "[INFO] Starting PowerShell Advanced Tooling Workshop..." -ForegroundColor Cyan
-Write-Host "[INFO] Connecting to Azure subscription..." -ForegroundColor Gray
+Write-Host "[INFO] Initializing Azure connection..." -ForegroundColor Gray
+
+# Enhanced Azure connection with automatic login and subscription selection
+function Initialize-AzureConnection {
+    param(
+        [string]$PreferredSubscriptionId = $null
+    )
+    
+    try {
+        # Check if already connected to Azure
+        $context = Get-AzContext -ErrorAction SilentlyContinue
+        
+        if (-not $context) {
+            Write-Host "[CONNECT] Not logged in to Azure. Starting authentication..." -ForegroundColor Yellow
+            Connect-AzAccount -ErrorAction Stop | Out-Null
+            Write-Host "[SUCCESS] Successfully logged in to Azure!" -ForegroundColor Green
+        } else {
+            Write-Host "[CONNECTED] Already logged in as: $($context.Account.Id)" -ForegroundColor Green
+        }
+        
+        # Get available subscriptions
+        $subscriptions = Get-AzSubscription | Where-Object { $_.State -eq "Enabled" }
+        
+        if (-not $subscriptions) {
+            throw "No enabled Azure subscriptions found for this account."
+        }
+        
+        # Select subscription
+        if ($subscriptions.Count -eq 1) {
+            $selectedSubscription = $subscriptions[0]
+            Write-Host "[AUTO] Using only available subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+        } elseif ($PreferredSubscriptionId -and ($subscriptions | Where-Object { $_.Id -eq $PreferredSubscriptionId })) {
+            $selectedSubscription = $subscriptions | Where-Object { $_.Id -eq $PreferredSubscriptionId }
+            Write-Host "[PREFERRED] Using specified subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+        } else {
+            # Multiple subscriptions - show options
+            Write-Host "[CHOICE] Multiple subscriptions available:" -ForegroundColor Yellow
+            for ($i = 0; $i -lt $subscriptions.Count; $i++) {
+                $sub = $subscriptions[$i]
+                Write-Host "  [$($i + 1)] $($sub.Name) ($($sub.Id))" -ForegroundColor Gray
+            }
+            
+            do {
+                $choice = Read-Host "Select subscription (1-$($subscriptions.Count)) or press Enter for default"
+                if ([string]::IsNullOrWhiteSpace($choice)) {
+                    $selectedSubscription = $subscriptions[0]
+                    Write-Host "[DEFAULT] Using first subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+                    break
+                } elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $subscriptions.Count) {
+                    $selectedSubscription = $subscriptions[[int]$choice - 1]
+                    Write-Host "[SELECTED] Using: $($selectedSubscription.Name)" -ForegroundColor Cyan
+                    break
+                } else {
+                    Write-Host "[ERROR] Invalid choice. Please enter a number between 1 and $($subscriptions.Count)" -ForegroundColor Red
+                }
+            } while ($true)
+        }
+        
+        # Set the subscription context
+        Set-AzContext -SubscriptionId $selectedSubscription.Id | Out-Null
+        Write-Host "[CONTEXT] Subscription context set successfully" -ForegroundColor Green
+        
+        return $selectedSubscription
+        
+    } catch {
+        Write-Host "[ERROR] Azure connection failed: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[HELP] Please ensure Azure PowerShell module is installed: Install-Module Az" -ForegroundColor Yellow
+        exit 1
+    }
+}
 
 # Initialize Azure connection
-try {
-    $subscription = Get-AzSubscription | Where-Object { $_.State -eq "Enabled" } | Select-Object -First 1
-    if (-not $subscription) {
-        Write-Host "[ERROR] No active Azure subscription found. Please run Connect-AzAccount first." -ForegroundColor Red
-        exit
-    }
-    Write-Host "[SUCCESS] Connected to: $($subscription.Name)" -ForegroundColor Green
-} catch {
-    Write-Host "[ERROR] Azure connection failed: $($_.Exception.Message)" -ForegroundColor Red
-    exit
-}
+$subscription = Initialize-AzureConnection
+Write-Host "[SUCCESS] Ready to analyze Azure resources in: $($subscription.Name)" -ForegroundColor Green
 
 $separator = "=" * 80
 Write-Host "`n$separator" -ForegroundColor DarkGray
