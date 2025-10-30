@@ -76,8 +76,8 @@ PSCode/
 │   ├── Azure-Runspaces-Masterclass.ps1         # Parallelism & concurrency
 │   ├── log_unsafe.txt                          # Demo: Unsafe concurrent writes
 │   └── log_safe_mutex.txt                      # Demo: Mutex-protected writes
-├── 09_capstone_project/
-│   └── Azure-Cost-Intelligence-Agent.ps1       # Real-world integration project
+├── 09_final_solution_apply_learnings/
+│   └── Azure-Cost-Monitor.ps1                  # Real-world cost monitoring solution
 └── .gitignore                                  # Git configuration
 ```
 
@@ -115,7 +115,7 @@ PSCode/
    └─→ Concurrent execution, thread safety, performance
 
   [09] CAPSTONE PROJECT               [Expert]       ⏱️  120-180 min
-   └─→ Real-world Azure Cost Intelligence Agent
+   └─→ Real-world Azure Cost Monitor solution
        integrating ALL 8 previous modules' concepts
 
                          ⬇️ TOTAL: ~15-20 HOURS ⬇️
@@ -386,40 +386,40 @@ cd 01_knowledge_refresh
 
 ---
 
-### **Module 09: Azure Cost Intelligence Agent** 🏆
+### **Module 09: Azure Cost Monitor** 🏆
 **Goal:** Capstone project integrating ALL 8 previous modules' concepts into a real-world solution
 
 **What You'll Learn:**
-- Integrating classes, functions, and parameters into a cohesive agent
-- Building intelligent query interfaces with natural language processing
+- Integrating classes, functions, and parameters into a cohesive monitoring solution
+- Building intelligent cost analysis with tabular display interfaces
 - Implementing enterprise-grade error handling and retry logic
-- Parallel cost analysis across multiple subscriptions
+- Real Azure cost data fetching and analysis
 - Real-world deployment patterns and considerations
 
 **Key Concepts:**
 - Complete architectural integration of all 8 modules
-- `CostRecord`, `CostAnalysis`, and `AzureCostAgent` class definitions
-- `Get-CostByResourceType` and `Get-CostSummary` reusable functions
-- `Invoke-CostQuery` with flexible parameter sets for NLP queries
-- `Invoke-SafeOperation` with retry and exponential backoff
+- `CostRecord` and `ResourceMetric` class definitions for data modeling
+- `Get-AzureResources` and `Analyze-CostByResource` reusable functions
+- `Get-CostReport` with flexible parameter sets for reporting
+- `Invoke-SafeAzureCall` with retry and exponential backoff
 - `Invoke-ParallelCostAnalysis` using RunspacePool for concurrency
 - Real Azure cost data analysis patterns
 
 **Real-World Application:**
-- Deploy intelligent cost monitoring agents to Azure subscriptions
+- Deploy cost monitoring solutions to Azure subscriptions
 - Track and report on cloud spending across enterprises
-- Identify cost anomalies and optimization opportunities
-- Integrate with automation accounts for scheduled analysis
-- Archive cost reports in Git for historical tracking
+- Identify high-cost resources and optimization opportunities
+- Generate tabular cost reports for budget planning
 - Scale cost analysis from 1 to 100+ subscriptions
+- Archive cost reports for historical tracking
 
 **Project Features:**
-- ✅ Intelligent cost agent with natural language query support
+- ✅ Real Azure cost monitor with tabular terminal display
 - ✅ Advanced class-based object model for cost data
 - ✅ Reusable, well-documented functions following best practices
 - ✅ Flexible parameter binding with validation
 - ✅ Production-grade error handling with automatic recovery
-- ✅ Multi-threaded cost analysis with RunspacePool
+- ✅ Multi-threaded cost analysis capability
 - ✅ Comprehensive logging and debugging capabilities
 - ✅ Git-ready cost report generation
 - ✅ Extensible architecture for future enhancements
@@ -776,7 +776,7 @@ Track your progress through all modules:
 - [ ] **Module 06** - Debugging ⏱️ 60-75 min
 - [ ] **Module 07** - Git Integration ⏱️ 90+ min
 - [ ] **Module 08** - Runspaces & Parallelism ⏱️ 90-120 min
-- [ ] **Module 09** - Azure Cost Intelligence Agent (Capstone) ⏱️ 120-180 min
+- [ ] **Module 09** - Azure Cost Monitor (Capstone) ⏱️ 120-180 min
 
 ---
 
