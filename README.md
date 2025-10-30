@@ -61,15 +61,15 @@ PSCode/
 ├── 03_mastering_parameters/
 │   └── Azure-Parameter-Mastery.ps1             # Parameter handling & validation
 ├── 04_powershell_classes/
-│   └── Azure-Classes-Workshop.ps1              # OOP with PowerShell classes
+│   └── Azure-Classes-Training.ps1              # OOP with PowerShell classes
 ├── 05_error_handling/
-│   └── Azure-Error-Handling-Workshop.ps1       # Try/catch/finally patterns
+│   └── Azure-Error-Handling-Training.ps1       # Try/catch/finally patterns
 ├── 06_debugging/
-│   └── Azure-Debugging-Workshop.ps1            # Debugging tools & techniques
+│   └── Azure-Debugging-Lab.ps1                 # Debugging tools & techniques
 ├── 07_git_integration/
-│   └── Azure-Git-Workshop.ps1                  # Git automation & workflows
+│   └── Azure-Git-Training.ps1                  # Git automation & workflows
 ├── 08_runspaces/
-│   ├── Azure-Runspaces-Workshop.ps1            # Parallelism & concurrency
+│   ├── Azure-Runspaces-Masterclass.ps1         # Parallelism & concurrency
 │   ├── log_unsafe.txt                          # Demo: Unsafe concurrent writes
 │   └── log_safe_mutex.txt                      # Demo: Mutex-protected writes
 └── .gitignore                                  # Git configuration

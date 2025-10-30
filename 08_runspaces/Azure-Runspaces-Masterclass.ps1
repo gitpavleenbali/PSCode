@@ -4,7 +4,7 @@
 #
 # RUN FROM PSCode ROOT:
 #   cd path/to/PSCode
-#   .\08_runspaces\Azure-Runspaces-Workshop.ps1
+#   .\08_runspaces\Azure-Runspaces-Masterclass.ps1
 #
 # Prerequisites: PowerShell 5.1+ (or 7+ for ThreadJob demonstrations)
 # ==============================================================================================

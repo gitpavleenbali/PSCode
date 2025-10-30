@@ -4,7 +4,7 @@
 #
 # RUN FROM PSCode ROOT:
 #   cd path/to/PSCode
-#   .\06_debugging\Azure-Debugging-Workshop.ps1
+#   .\06_debugging\Azure-Debugging-Lab.ps1
 #
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================

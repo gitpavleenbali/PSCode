@@ -4,7 +4,7 @@
 #
 # RUN FROM PSCode ROOT:
 #   cd path/to/PSCode
-#   .\04_powershell_classes\Azure-Classes-Workshop.ps1
+#   .\04_powershell_classes\Azure-Classes-Training.ps1
 #
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================

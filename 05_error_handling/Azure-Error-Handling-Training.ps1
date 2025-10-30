@@ -4,7 +4,7 @@
 #
 # RUN FROM PSCode ROOT:
 #   cd path/to/PSCode
-#   .\05_error_handling\Azure-Error-Handling-Workshop.ps1
+#   .\05_error_handling\Azure-Error-Handling-Training.ps1
 #
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================

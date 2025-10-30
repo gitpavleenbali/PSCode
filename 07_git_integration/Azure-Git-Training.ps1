@@ -4,7 +4,7 @@
 #
 # RUN FROM PSCode ROOT:
 #   cd path/to/PSCode
-#   .\07_git_integration\Azure-Git-Workshop.ps1
+#   .\07_git_integration\Azure-Git-Training.ps1
 #
 # Prerequisites: Git installed, PowerShell 7+, VS Code with Git extensions
 # ==============================================================================================
