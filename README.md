@@ -378,7 +378,36 @@ cd ../03_mastering_parameters && .\Azure-Parameter-Mastery.ps1
 
 ---
 
-## 📋 Prerequisites
+### Prerequisites & Automatic Validation
+
+Each module automatically checks for required dependencies and provides helpful installation instructions if anything is missing:
+
+```powershell
+[CHECK] Verifying Azure PowerShell module...
+[SUCCESS] Azure PowerShell module found!
+```
+
+If the Azure module is not installed, you'll see:
+
+```powershell
+[CHECK] Verifying Azure PowerShell module...
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                      AZURE MODULE NOT INSTALLED                               ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+The Azure PowerShell module (Az) is required to run this workshop.
+
+To install the Azure module, run this command in PowerShell (as Administrator):
+
+    Install-Module -Name Az -Repository PSGallery -Force -AllowClobber
+
+After installation completes, run this script again.
+```
+
+**All modules automatically validate prerequisites before starting**, so you'll never waste time on setup errors!
+
+---
 
 ### System Requirements
 - **Windows PowerShell 5.1+** or **PowerShell 7.x**

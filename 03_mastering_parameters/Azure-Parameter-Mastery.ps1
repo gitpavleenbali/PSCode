@@ -5,6 +5,35 @@
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 
+# ==============================================================================================
+# PREREQUISITE CHECK: Azure PowerShell Module
+# ==============================================================================================
+Write-Host "[CHECK] Verifying Azure PowerShell module..." -ForegroundColor Cyan
+
+$azModule = Get-Module -Name Az.Accounts -ListAvailable -ErrorAction SilentlyContinue
+
+if (-not $azModule) {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                      AZURE MODULE NOT INSTALLED                               ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "The Azure PowerShell module (Az) is required to run this workshop." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To install the Azure module, run this command in PowerShell (as Administrator):" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "    Install-Module -Name Az -Repository PSGallery -Force -AllowClobber" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "After installation completes, run this script again." -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "For more information, visit: https://learn.microsoft.com/powershell/azure/install-azure-powershell" -ForegroundColor Gray
+    Write-Host ""
+    exit 1
+}
+
+Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
+Write-Host ""
+
 Write-Host "[INFO] Starting PowerShell Parameter Mastery Workshop..." -ForegroundColor Cyan
 Write-Host "[INFO] Initializing Azure connection..." -ForegroundColor Gray
 

@@ -5,6 +5,23 @@
 # Prerequisites: PowerShell 5.1+ (or 7+ for ThreadJob demonstrations)
 # ==============================================================================================
 
+# ==============================================================================================
+# PREREQUISITE CHECK: Azure PowerShell Module (Optional - for Azure scenarios)
+# ==============================================================================================
+Write-Host "[CHECK] Verifying Azure PowerShell module..." -ForegroundColor Cyan
+
+$azModule = Get-Module -Name Az.Accounts -ListAvailable -ErrorAction SilentlyContinue
+
+if (-not $azModule) {
+    Write-Host "[WARNING] Azure PowerShell module not found (optional for core concepts)" -ForegroundColor Yellow
+    Write-Host "Some advanced Azure scenarios require the Azure module. Install it when ready:" -ForegroundColor Gray
+    Write-Host "    Install-Module -Name Az -Repository PSGallery -Force -AllowClobber" -ForegroundColor Green
+}
+else {
+    Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
+}
+Write-Host ""
+
 Write-Host "[INFO] Starting PowerShell Runspaces and Parallelism Workshop..." -ForegroundColor Cyan
 Write-Host "[INFO] Initializing concurrent execution environment..." -ForegroundColor Gray
 
