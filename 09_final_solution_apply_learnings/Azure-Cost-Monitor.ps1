@@ -60,6 +60,39 @@ catch {
 Write-Host ""
 Write-Host "[INFO] Starting Azure Cost Monitor - Module 09 Capstone Project..." -ForegroundColor Cyan
 Write-Host "[INFO] Integrating all 8 PSCode training module concepts..." -ForegroundColor Gray
+
+# Check Azure authentication and subscription
+Write-Host "[CHECK] Verifying Azure authentication..." -ForegroundColor Cyan
+try {
+    $azContext = Get-AzContext -ErrorAction SilentlyContinue
+    if (-not $azContext) {
+        Write-Host ""
+        Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+        Write-Host "║                      AZURE NOT AUTHENTICATED                                  ║" -ForegroundColor Red
+        Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+        Write-Host ""
+        Write-Host "You need to authenticate with Azure first." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Run one of these commands to authenticate:" -ForegroundColor Cyan
+        Write-Host "    Connect-AzAccount                    # Interactive login" -ForegroundColor Green
+        Write-Host "    az login                             # Azure CLI login" -ForegroundColor Green
+        Write-Host ""
+        Write-Host "After authentication completes, run this script again." -ForegroundColor Cyan
+        Write-Host ""
+        exit 1
+    }
+    
+    Write-Host "[SUCCESS] Azure authentication verified!" -ForegroundColor Green
+    Write-Host "[INFO] Current subscription: $($azContext.Subscription.Name)" -ForegroundColor Gray
+    Write-Host "[INFO] Subscription ID: $($azContext.Subscription.Id)" -ForegroundColor Gray
+    Write-Host "[INFO] Tenant: $($azContext.Tenant.Id)" -ForegroundColor Gray
+}
+catch {
+    Write-Host "[ERROR] Failed to check Azure authentication: $_" -ForegroundColor Red
+    Write-Host "Please ensure Azure PowerShell module is properly installed and try again." -ForegroundColor Yellow
+    exit 1
+}
+
 Write-Host ""
 
 Set-StrictMode -Version 3.0
