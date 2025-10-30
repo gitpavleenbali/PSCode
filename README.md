@@ -11,16 +11,20 @@
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Repository Structure](#repository-structure)
-- [Module Roadmap](#module-roadmap)
-- [Quick Start](#quick-start)
-- [Module Details](#module-details)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Best Practices](#best-practices)
-- [Real-World Scenarios](#real-world-scenarios)
-- [Support & Contributions](#support--contributions)
+- [Overview](#-overview)
+- [Repository Structure](#-repository-structure)
+- [Module Roadmap](#-module-roadmap)
+- [Quick Start](#-quick-start)
+- [Module Details](#-module-details)
+- [Prerequisites](#prerequisites--automatic-validation)
+- [Getting Started](#-getting-started)
+- [Best Practices](#-best-practices)
+- [Real-World Scenarios](#-real-world-scenarios)
+- [Learning Paths](#-learning-path-recommendations)
+- [Performance Benchmarks](#-performance-benchmarks)
+- [Support & Contributions](#-support--contributions)
+- [Module Checklist](#-module-checklist)
+- [License](#-license)
 
 ---
 
@@ -654,11 +658,14 @@ From Module 08 demonstrations:
 
 ## 🤝 Support & Contributions
 
-### Getting Help
-- 📖 Review module comments and inline documentation
-- 🔍 Check Azure PowerShell documentation: [docs.microsoft.com](https://docs.microsoft.com)
-- 💬 Open an issue on the GitHub repository
-- 📧 Contact the maintainers
+### 📞 Contact & Resources
+
+- 🐙 **GitHub:** [@gitpavleenbali](https://github.com/gitpavleenbali)
+- 📚 **PowerShell Docs:** [learn.microsoft.com/powershell](https://learn.microsoft.com/powershell)
+- ☁️ **Azure Docs:** [learn.microsoft.com/azure](https://learn.microsoft.com/azure)
+- 🎓 **Community:** [PowerShell.org](https://powershell.org)
+
+---
 
 ### Contributing
 ```powershell
@@ -734,15 +741,6 @@ Built with ❤️ for the PowerShell and Azure communities.
 
 **Created for:** Cloud Solution Architects, DevOps Engineers, and PowerShell Enthusiasts  
 **Repository:** [gitpavleenbali/PSCode](https://github.com/gitpavleenbali/PSCode)
-
----
-
-## 📞 Contact & Resources
-
-- 🐙 **GitHub:** [@gitpavleenbali](https://github.com/gitpavleenbali)
-- 📚 **PowerShell Docs:** [learn.microsoft.com/powershell](https://learn.microsoft.com/powershell)
-- ☁️ **Azure Docs:** [learn.microsoft.com/azure](https://learn.microsoft.com/azure)
-- 🎓 **Community:** [PowerShell.org](https://powershell.org)
 
 ---
 
