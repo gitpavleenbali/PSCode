@@ -1,7 +1,11 @@
 # ==============================================================================================
 # 02. Advanced Functions: Azure Resource Manager
 # Purpose: Demonstrate PowerShell advanced function concepts using Azure resource management
-# Run: cd '02_advanced_functions' && .\Azure-Resource-Manager.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\02_advanced_functions\Azure-Resource-Manager.ps1
+#
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 
@@ -34,7 +38,7 @@ if (-not $azModule) {
 Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
 Write-Host ""
 
-Write-Host "[INFO] Starting PowerShell Advanced Functions Workshop..." -ForegroundColor Cyan
+Write-Host "[INFO] Starting PowerShell Advanced Functions Training..." -ForegroundColor Cyan
 Write-Host "[INFO] Initializing Azure connection..." -ForegroundColor Gray
 
 # Enhanced Azure connection with automatic login and subscription selection

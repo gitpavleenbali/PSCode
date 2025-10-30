@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 04. PowerShell Classes: Azure Resource Management with Object-Oriented Programming
+# 04. PowerShell Classes: Object-Oriented Programming Training
 # Purpose: Demonstrate PowerShell class concepts using Azure resource management scenarios
-# Run: cd '04_powershell_classes' && .\Azure-Classes-Workshop.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\04_powershell_classes\Azure-Classes-Workshop.ps1
+#
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 

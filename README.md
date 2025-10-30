@@ -1,6 +1,6 @@
 # 🚀 PowerShell Azure Cloud Automation Mastery
 
-> **From Novice to Expert: Complete PowerShell & Azure Integration Workshop Series**
+> **From Novice to Expert: Complete PowerShell & Azure Integration Training Series**
 
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue?logo=powershell)](https://www.microsoft.com/en-us/powershell)
 [![Azure](https://img.shields.io/badge/Azure-Cloud-0078D4?logo=microsoft-azure)](https://azure.microsoft.com)
@@ -26,7 +26,7 @@
 
 ## 🎯 Overview
 
-**PSCode** is a comprehensive, hands-on workshop series designed to transform PowerShell users into Azure Cloud automation experts. This repository contains **8 progressive modules** covering everything from foundational PowerShell concepts to advanced concurrent execution patterns for enterprise-scale Azure operations.
+**PSCode** is a comprehensive, hands-on training series designed to transform PowerShell users into Azure Cloud automation experts. This repository contains **8 progressive modules** covering everything from foundational PowerShell concepts to advanced concurrent execution patterns for enterprise-scale Azure operations.
 
 ### 🎓 What You'll Master
 
@@ -136,12 +136,10 @@ cd 01_knowledge_refresh
 
 ### 4️⃣ Progress Through Modules Sequentially
 ```powershell
-# Module 02
-cd ../02_advanced_functions && .\Azure-Resource-Manager.ps1
-
-# Module 03
-cd ../03_mastering_parameters && .\Azure-Parameter-Mastery.ps1
-
+# From PSCode root folder:
+.\01_knowledge_refresh\Azure-Cloud-Analyzer.ps1
+.\02_advanced_functions\Azure-Resource-Manager.ps1
+.\03_mastering_parameters\Azure-Parameter-Mastery.ps1
 # Continue through all 8 modules...
 ```
 
@@ -396,7 +394,7 @@ If the Azure module is not installed, you'll see:
 ║                      AZURE MODULE NOT INSTALLED                               ║
 ╚════════════════════════════════════════════════════════════════════════════════╝
 
-The Azure PowerShell module (Az) is required to run this workshop.
+The Azure PowerShell module (Az) is required to run this training series.
 
 To install the Azure module, run this command in PowerShell (as Administrator):
 

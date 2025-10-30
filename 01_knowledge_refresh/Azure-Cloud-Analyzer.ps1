@@ -1,7 +1,11 @@
 # ==============================================================================================
 # 01. Knowledge Refresh: Azure Cloud Resource Analyzer
 # Purpose: Demonstrate PowerShell concepts (Cmdlets, Arrays, Pipeline) using Azure resources
-# Run: cd '01_knowledge_refresh' && .\Azure-Cloud-Analyzer.ps1
+# 
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\01_knowledge_refresh\Azure-Cloud-Analyzer.ps1
+#
 # Prerequisites: Azure PowerShell module installed and user logged in Azure (Connect-AzAccount)
 # ==============================================================================================
 
@@ -34,7 +38,7 @@ if (-not $azModule) {
 Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
 Write-Host ""
 
-Write-Host "[INFO] Starting PowerShell Advanced Tooling Workshop..." -ForegroundColor Cyan
+Write-Host "[INFO] Starting PowerShell Fundamentals Training..." -ForegroundColor Cyan
 Write-Host "[INFO] Initializing Azure connection..." -ForegroundColor Gray
 
 # Enhanced Azure connection with automatic login and subscription selection
@@ -383,11 +387,7 @@ foreach ($type in $insights.TopResourceTypes) {
 Write-Host "`n[PAUSE] Press Enter to see workshop summary..." -ForegroundColor Magenta
 $pause7 = Read-Host
 
-# ============================================================================
-# WORKSHOP SUMMARY
-# ============================================================================
-Write-Host "`n$separator" -ForegroundColor DarkGray
-Write-Host "[WORKSHOP COMPLETE] PowerShell Advanced Tooling - Azure Analysis" -ForegroundColor Green
+Write-Host "[WORKSHOP COMPLETE] PowerShell Fundamentals - Azure Analysis" -ForegroundColor Green
 Write-Host "$separator" -ForegroundColor DarkGray
 
 Write-Host "`n[CONCEPTS DEMONSTRATED]" -ForegroundColor White

@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 07. Git Integration & Source Control: PowerShell DevOps with Azure Automation
+# 07. Git Integration: DevOps Training
 # Purpose: Demonstrate comprehensive Git workflows integrated with PowerShell Azure automation
-# Run: cd '07_git_integration' && .\Azure-Git-Workshop.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\07_git_integration\Azure-Git-Workshop.ps1
+#
 # Prerequisites: Git installed, PowerShell 7+, VS Code with Git extensions
 # ==============================================================================================
 

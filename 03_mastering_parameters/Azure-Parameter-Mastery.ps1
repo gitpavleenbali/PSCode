@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 03. Mastering Parameters: Azure Parameter Management Workshop
+# 03. Mastering Parameters: Azure Parameter Management Training
 # Purpose: Demonstrate advanced PowerShell parameter handling using Azure management scenarios
-# Run: cd '03_mastering_parameters' && .\Azure-Parameter-Mastery.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\03_mastering_parameters\Azure-Parameter-Mastery.ps1
+#
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 

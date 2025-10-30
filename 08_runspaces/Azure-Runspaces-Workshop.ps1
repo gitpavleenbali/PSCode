@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 08. Runspaces and Parallelism: Azure Concurrent Execution Workshop
+# 08. Runspaces and Parallelism: Advanced Performance Masterclass
 # Purpose: Master PowerShell runspaces for concurrent execution, thread safety, and Azure automation at scale
-# Run: cd '08_runspaces' && .\Azure-Runspaces-Workshop.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\08_runspaces\Azure-Runspaces-Workshop.ps1
+#
 # Prerequisites: PowerShell 5.1+ (or 7+ for ThreadJob demonstrations)
 # ==============================================================================================
 

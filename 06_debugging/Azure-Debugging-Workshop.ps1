@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 06. PowerShell Debugging: Azure Automation with Advanced Debugging Techniques
+# 06. PowerShell Debugging: Advanced Debugging Lab
 # Purpose: Demonstrate comprehensive PowerShell debugging techniques using Azure automation scenarios
-# Run: cd '06_debugging' && .\Azure-Debugging-Workshop.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\06_debugging\Azure-Debugging-Workshop.ps1
+#
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 

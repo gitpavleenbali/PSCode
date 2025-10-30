@@ -1,7 +1,11 @@
 # ==============================================================================================
-# 05. PowerShell Error Handling: Azure Automation with Robust Error Management
+# 05. PowerShell Error Handling: Resilience Training
 # Purpose: Demonstrate comprehensive error handling techniques using Azure automation scenarios
-# Run: cd '05_error_handling' && .\Azure-Error-Handling-Workshop.ps1
+#
+# RUN FROM PSCode ROOT:
+#   cd path/to/PSCode
+#   .\05_error_handling\Azure-Error-Handling-Workshop.ps1
+#
 # Prerequisites: Azure PowerShell module installed and authenticated Azure session
 # ==============================================================================================
 
