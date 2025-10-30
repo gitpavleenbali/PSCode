@@ -30,7 +30,7 @@
 
 ## 🎯 Overview
 
-**PSCode** is a comprehensive, hands-on training series designed to transform PowerShell users into Azure Cloud automation experts. This repository contains **8 progressive modules** covering everything from foundational PowerShell concepts to advanced concurrent execution patterns for enterprise-scale Azure operations.
+**PSCode** is a comprehensive, hands-on training series designed to transform PowerShell users into Azure Cloud automation experts. This repository contains **9 progressive modules** covering everything from foundational PowerShell concepts to advanced concurrent execution patterns, culminating in a real-world capstone project that integrates all learned concepts.
 
 ### 🎓 What You'll Master
 
@@ -76,6 +76,8 @@ PSCode/
 │   ├── Azure-Runspaces-Masterclass.ps1         # Parallelism & concurrency
 │   ├── log_unsafe.txt                          # Demo: Unsafe concurrent writes
 │   └── log_safe_mutex.txt                      # Demo: Mutex-protected writes
+├── 09_capstone_project/
+│   └── Azure-Cost-Intelligence-Agent.ps1       # Real-world integration project
 └── .gitignore                                  # Git configuration
 ```
 
@@ -112,9 +114,13 @@ PSCode/
   [08] RUNSPACES & PARALLELISM        [Advanced]     ⏱️  90-120 min
    └─→ Concurrent execution, thread safety, performance
 
-                         ⬇️ TOTAL: ~10-14 HOURS ⬇️
-                   Complete mastery of PowerShell
-                   and Azure automation workflows
+  [09] CAPSTONE PROJECT               [Expert]       ⏱️  120-180 min
+   └─→ Real-world Azure Cost Intelligence Agent
+       integrating ALL 8 previous modules' concepts
+
+                         ⬇️ TOTAL: ~15-20 HOURS ⬇️
+               Complete mastery of PowerShell and
+              enterprise Azure automation workflows
 ```
 
 ---
@@ -377,6 +383,65 @@ cd 01_knowledge_refresh
 - ✅ Modern PowerShell 7 parallelism alternatives
 
 **Time:** 90-120 minutes | **Difficulty:** ⭐⭐⭐ Advanced
+
+---
+
+### **Module 09: Azure Cost Intelligence Agent** 🏆
+**Goal:** Capstone project integrating ALL 8 previous modules' concepts into a real-world solution
+
+**What You'll Learn:**
+- Integrating classes, functions, and parameters into a cohesive agent
+- Building intelligent query interfaces with natural language processing
+- Implementing enterprise-grade error handling and retry logic
+- Parallel cost analysis across multiple subscriptions
+- Real-world deployment patterns and considerations
+
+**Key Concepts:**
+- Complete architectural integration of all 8 modules
+- `CostRecord`, `CostAnalysis`, and `AzureCostAgent` class definitions
+- `Get-CostByResourceType` and `Get-CostSummary` reusable functions
+- `Invoke-CostQuery` with flexible parameter sets for NLP queries
+- `Invoke-SafeOperation` with retry and exponential backoff
+- `Invoke-ParallelCostAnalysis` using RunspacePool for concurrency
+- Real Azure cost data analysis patterns
+
+**Real-World Application:**
+- Deploy intelligent cost monitoring agents to Azure subscriptions
+- Track and report on cloud spending across enterprises
+- Identify cost anomalies and optimization opportunities
+- Integrate with automation accounts for scheduled analysis
+- Archive cost reports in Git for historical tracking
+- Scale cost analysis from 1 to 100+ subscriptions
+
+**Project Features:**
+- ✅ Intelligent cost agent with natural language query support
+- ✅ Advanced class-based object model for cost data
+- ✅ Reusable, well-documented functions following best practices
+- ✅ Flexible parameter binding with validation
+- ✅ Production-grade error handling with automatic recovery
+- ✅ Multi-threaded cost analysis with RunspacePool
+- ✅ Comprehensive logging and debugging capabilities
+- ✅ Git-ready cost report generation
+- ✅ Extensible architecture for future enhancements
+
+**Learning Outcomes:**
+- 🎓 Understand complete enterprise application architecture
+- 🎓 Integrate disparate PowerShell patterns into cohesive solutions
+- 🎓 Design scalable, maintainable cloud automation systems
+- 🎓 Apply all 8 modules' concepts to solve real business problems
+- 🎓 Build production-ready PowerShell applications
+
+**Project Modules Used:**
+- Module 01: Azure context and resource discovery
+- Module 02: Reusable function architecture
+- Module 03: Flexible parameter handling and validation
+- Module 04: Object-oriented design with custom classes
+- Module 05: Error handling and recovery strategies
+- Module 06: Debugging and diagnostic capabilities
+- Module 07: Git integration for result tracking
+- Module 08: Concurrent execution with RunspacePool
+
+**Time:** 120-180 minutes | **Difficulty:** ⭐⭐⭐⭐⭐ Expert
 
 ---
 
@@ -711,12 +776,13 @@ Track your progress through all modules:
 - [ ] **Module 06** - Debugging ⏱️ 60-75 min
 - [ ] **Module 07** - Git Integration ⏱️ 90+ min
 - [ ] **Module 08** - Runspaces & Parallelism ⏱️ 90-120 min
+- [ ] **Module 09** - Azure Cost Intelligence Agent (Capstone) ⏱️ 120-180 min
 
 ---
 
 ## 🎉 Congratulations!
 
-Completing all 8 modules means you've mastered:
+Completing all 9 modules means you've mastered:
 
 ✅ PowerShell fundamentals and advanced scripting  
 ✅ Azure resource management and automation  
@@ -724,8 +790,9 @@ Completing all 8 modules means you've mastered:
 ✅ Object-oriented programming in PowerShell  
 ✅ Version control and CI/CD integration  
 ✅ Concurrent execution and performance optimization  
+✅ Real-world capstone project architecture and design  
 
-**You're now equipped to build enterprise-scale Azure automation solutions!**
+**You're now equipped to build enterprise-scale Azure automation solutions and design intelligent cloud management applications!**
 
 ---
 
