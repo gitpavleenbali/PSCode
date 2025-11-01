@@ -15,15 +15,16 @@
 - [Repository Structure](#-repository-structure)
 - [Module Roadmap](#-module-roadmap)
 - [Quick Start](#-quick-start)
-- [Module Details](#-module-details)
 - [Prerequisites](#prerequisites--automatic-validation)
 - [Getting Started](#-getting-started)
+- [Module Details](#-module-details)
 - [Best Practices](#-best-practices)
 - [Real-World Scenarios](#-real-world-scenarios)
 - [Learning Paths](#-learning-path-recommendations)
 - [Performance Benchmarks](#-performance-benchmarks)
 - [Support & Contributions](#-support--contributions)
 - [Module Checklist](#-module-checklist)
+- [To-Do](#-to-do)
 - [License](#-license)
 
 ---
@@ -152,6 +153,118 @@ cd 01_knowledge_refresh
 .\03_mastering_parameters\Azure-Parameter-Mastery.ps1
 # Continue through all 8 modules...
 ```
+
+---
+
+## Prerequisites & Automatic Validation
+
+Each module automatically checks for required dependencies and provides helpful installation instructions if anything is missing:
+
+```powershell
+[CHECK] Verifying Azure PowerShell module...
+[SUCCESS] Azure PowerShell module found!
+```
+
+If the Azure module is not installed, you'll see:
+
+```powershell
+[CHECK] Verifying Azure PowerShell module...
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                      AZURE MODULE NOT INSTALLED                               ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+The Azure PowerShell module (Az) is required to run this training series.
+
+To install the Azure module, run this command in PowerShell (as Administrator):
+
+    Install-Module -Name Az -Repository PSGallery -Force -AllowClobber
+
+After installation completes, run this script again.
+```
+
+**All modules automatically validate prerequisites before starting**, so you'll never waste time on setup errors!
+
+---
+
+### System Requirements
+- **Windows PowerShell 5.1+** or **PowerShell 7.x**
+- **Windows 10/11** or **Windows Server 2016+**
+- **.NET Framework 4.5+** (or .NET 6+ for PS 7)
+
+### Software Installation
+```powershell
+# Install PowerShell 7 (recommended)
+winget install Microsoft.PowerShell
+
+# Install Git (for Module 07)
+winget install Git.Git
+
+# Install Azure PowerShell Module (optional but recommended)
+Install-Module -Name Az -Repository PSGallery -Force
+```
+
+### Permissions Required
+- ✅ Local admin access (or at minimum: script execution rights)
+- ✅ Visual Studio Code (optional, recommended for debugging)
+- ✅ Git client configured with credentials
+
+### Verify Setup
+```powershell
+# Check PowerShell version
+$PSVersionTable.PSVersion
+
+# Check Az module (if needed)
+Get-Module -Name Az -ListAvailable
+
+# Verify git
+git --version
+```
+
+---
+
+## 🎯 Getting Started
+
+### Step 1: Prepare Your Environment
+```powershell
+# Set execution policy to allow script running
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+
+# Create a workspace
+$workspace = "C:\PowerShell-Training"
+mkdir $workspace
+cd $workspace
+```
+
+### Step 2: Clone Repository
+```powershell
+git clone https://github.com/gitpavleenbali/PSCode.git
+cd PSCode
+```
+
+### Step 3: Start Module 01
+```powershell
+cd 01_knowledge_refresh
+.\Azure-Cloud-Analyzer.ps1
+
+# Follow the interactive prompts
+# Press Enter at [PAUSE] points to continue
+```
+
+### Step 4: Work Through Each Module
+```powershell
+# After completing Module 01
+cd ../02_advanced_functions
+.\Azure-Resource-Manager.ps1
+
+# Continue with subsequent modules...
+```
+
+### Step 5: Document Your Learning
+- ✏️ Take notes on key concepts
+- 🔄 Modify demo code and observe changes
+- 💾 Create your own scripts using learned patterns
+- 🐙 Push to your own repository
 
 ---
 
@@ -445,118 +558,6 @@ cd 01_knowledge_refresh
 
 ---
 
-### Prerequisites & Automatic Validation
-
-Each module automatically checks for required dependencies and provides helpful installation instructions if anything is missing:
-
-```powershell
-[CHECK] Verifying Azure PowerShell module...
-[SUCCESS] Azure PowerShell module found!
-```
-
-If the Azure module is not installed, you'll see:
-
-```powershell
-[CHECK] Verifying Azure PowerShell module...
-
-╔════════════════════════════════════════════════════════════════════════════════╗
-║                      AZURE MODULE NOT INSTALLED                               ║
-╚════════════════════════════════════════════════════════════════════════════════╝
-
-The Azure PowerShell module (Az) is required to run this training series.
-
-To install the Azure module, run this command in PowerShell (as Administrator):
-
-    Install-Module -Name Az -Repository PSGallery -Force -AllowClobber
-
-After installation completes, run this script again.
-```
-
-**All modules automatically validate prerequisites before starting**, so you'll never waste time on setup errors!
-
----
-
-### System Requirements
-- **Windows PowerShell 5.1+** or **PowerShell 7.x**
-- **Windows 10/11** or **Windows Server 2016+**
-- **.NET Framework 4.5+** (or .NET 6+ for PS 7)
-
-### Software Installation
-```powershell
-# Install PowerShell 7 (recommended)
-winget install Microsoft.PowerShell
-
-# Install Git (for Module 07)
-winget install Git.Git
-
-# Install Azure PowerShell Module (optional but recommended)
-Install-Module -Name Az -Repository PSGallery -Force
-```
-
-### Permissions Required
-- ✅ Local admin access (or at minimum: script execution rights)
-- ✅ Visual Studio Code (optional, recommended for debugging)
-- ✅ Git client configured with credentials
-
-### Verify Setup
-```powershell
-# Check PowerShell version
-$PSVersionTable.PSVersion
-
-# Check Az module (if needed)
-Get-Module -Name Az -ListAvailable
-
-# Verify git
-git --version
-```
-
----
-
-## 🎯 Getting Started
-
-### Step 1: Prepare Your Environment
-```powershell
-# Set execution policy to allow script running
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-
-# Create a workspace
-$workspace = "C:\PowerShell-Training"
-mkdir $workspace
-cd $workspace
-```
-
-### Step 2: Clone Repository
-```powershell
-git clone https://github.com/gitpavleenbali/PSCode.git
-cd PSCode
-```
-
-### Step 3: Start Module 01
-```powershell
-cd 01_knowledge_refresh
-.\Azure-Cloud-Analyzer.ps1
-
-# Follow the interactive prompts
-# Press Enter at [PAUSE] points to continue
-```
-
-### Step 4: Work Through Each Module
-```powershell
-# After completing Module 01
-cd ../02_advanced_functions
-.\Azure-Resource-Manager.ps1
-
-# Continue with subsequent modules...
-```
-
-### Step 5: Document Your Learning
-- ✏️ Take notes on key concepts
-- 🔄 Modify demo code and observe changes
-- 💾 Create your own scripts using learned patterns
-- 🐙 Push to your own repository
-
----
-
 ## 💡 Best Practices
 
 ### ✅ DO
@@ -777,6 +778,14 @@ Track your progress through all modules:
 - [ ] **Module 07** - Git Integration ⏱️ 90+ min
 - [ ] **Module 08** - Runspaces & Parallelism ⏱️ 90-120 min
 - [ ] **Module 09** - Azure Cost Monitor (Capstone) ⏱️ 120-180 min
+
+---
+
+## ✅ To-Do
+
+- [ ] Manually validate modules 01 through 09 after the prerequisite alignment
+- [ ] Confirm `README.md` reflects the latest prerequisite and execution flow
+- [ ] Stage, commit, and push the synchronized updates to the remote repository
 
 ---
 

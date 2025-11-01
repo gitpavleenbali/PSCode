@@ -6,8 +6,40 @@
 #   cd path/to/PSCode
 #   .\07_git_integration\Azure-Git-Training.ps1
 #
-# Prerequisites: Git installed, PowerShell 7+, VS Code with Git extensions
+# Prerequisites: PowerShell 5.1+, Az PowerShell module, AzCLI, Git, authenticated Azure session
 # ==============================================================================================
+
+# ==============================================================================================
+# PREREQUISITE CHECK: PowerShell Version
+# ==============================================================================================
+$originalLocation = (Get-Location).Path
+
+Write-Host "[CHECK] Verifying PowerShell version..." -ForegroundColor Cyan
+$psVersion = $PSVersionTable.PSVersion
+Write-Host "[INFO] PowerShell version detected: $($psVersion.ToString())" -ForegroundColor Gray
+
+if ($psVersion.Major -lt 5 -or ($psVersion.Major -eq 5 -and $psVersion.Minor -lt 1)) {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                   POWERSHELL VERSION NOT SUPPORTED                            ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "This workshop requires PowerShell 5.1 or later." -ForegroundColor Yellow
+    Write-Host "Current version detected: PowerShell $($psVersion.ToString())" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Install PowerShell 7 (recommended) with: winget install Microsoft.PowerShell" -ForegroundColor Green
+    Write-Host ""
+    exit 1
+}
+elseif ($psVersion.Major -eq 5 -and $psVersion.Minor -eq 1) {
+    Write-Host "[SUCCESS] PowerShell 5.1 detected - core features available" -ForegroundColor Green
+    Write-Host "[INFO] PowerShell 7+ recommended for best experience" -ForegroundColor Cyan
+}
+else {
+    Write-Host "[SUCCESS] PowerShell 7+ detected - all features available!" -ForegroundColor Green
+}
+
+Write-Host ""
 
 # ==============================================================================================
 # PREREQUISITE CHECK: Azure PowerShell Module
@@ -36,8 +68,83 @@ if (-not $azModule) {
 }
 
 Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
-Write-Host ""
 
+Write-Host "[CHECK] Verifying Azure CLI..." -ForegroundColor Cyan
+try {
+    $azCliVersion = az version 2>$null | ConvertFrom-Json
+    Write-Host "[SUCCESS] Azure CLI found - Version: $($azCliVersion.'azure-cli')" -ForegroundColor Green
+}
+catch {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                      AZURE CLI NOT INSTALLED                                  ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Azure CLI is required for this workshop." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To install Azure CLI, visit: https://learn.microsoft.com/cli/azure/install-azure-cli" -ForegroundColor Cyan
+    Write-Host "Or use winget: winget install Microsoft.AzureCLI" -ForegroundColor Green
+    Write-Host ""
+    exit 1
+}
+
+Write-Host ""
+Write-Host "[CHECK] Verifying Git installation..." -ForegroundColor Cyan
+try {
+    $gitVersionOutput = git --version 2>$null
+    if (-not [string]::IsNullOrWhiteSpace($gitVersionOutput)) {
+        Write-Host "[SUCCESS] Git found - $gitVersionOutput" -ForegroundColor Green
+    }
+    else {
+        throw "Git not found"
+    }
+}
+catch {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                          GIT NOT INSTALLED                                    ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Git is required for the DevOps exercises." -ForegroundColor Yellow
+    Write-Host "Install it with: winget install Git.Git" -ForegroundColor Green
+    Write-Host "More info: https://git-scm.com/downloads" -ForegroundColor Gray
+    Write-Host ""
+    exit 1
+}
+
+Write-Host ""
+Write-Host "[CHECK] Verifying Azure authentication..." -ForegroundColor Cyan
+try {
+    $azContext = Get-AzContext -ErrorAction SilentlyContinue
+    if (-not $azContext) {
+        Write-Host ""
+        Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+        Write-Host "║                      AZURE NOT AUTHENTICATED                                  ║" -ForegroundColor Red
+        Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+        Write-Host ""
+        Write-Host "You need to authenticate with Azure first." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Run one of these commands to authenticate:" -ForegroundColor Cyan
+        Write-Host "    Connect-AzAccount                    # Interactive login" -ForegroundColor Green
+        Write-Host "    az login                             # Azure CLI login" -ForegroundColor Green
+        Write-Host ""
+        Write-Host "After authentication completes, run this script again." -ForegroundColor Cyan
+        Write-Host ""
+        exit 1
+    }
+
+    Write-Host "[SUCCESS] Azure authentication verified!" -ForegroundColor Green
+    Write-Host "[INFO] Current subscription: $($azContext.Subscription.Name)" -ForegroundColor Gray
+    Write-Host "[INFO] Subscription ID: $($azContext.Subscription.Id)" -ForegroundColor Gray
+    Write-Host "[INFO] Tenant: $($azContext.Tenant.Id)" -ForegroundColor Gray
+}
+catch {
+    Write-Host "[ERROR] Failed to check Azure authentication: $_" -ForegroundColor Red
+    Write-Host "Please ensure Azure PowerShell module is properly installed and try again." -ForegroundColor Yellow
+    exit 1
+}
+
+Write-Host ""
 Write-Host "[INFO] Starting Git Integration & Source Control Workshop..." -ForegroundColor Cyan
 Write-Host "[INFO] PowerShell DevOps with Azure Automation" -ForegroundColor Gray
 
@@ -1044,12 +1151,27 @@ Write-Host "`n$separator" -ForegroundColor DarkGray
 # Clean up demo directory
 if (Test-Path $demoPath) {
     try {
-        Set-Location (Split-Path $demoPath -Parent)
-        Remove-Item $demoPath -Recurse -Force
-        Write-Host "[CLEANUP] Demo repository removed: $demoPath" -ForegroundColor Gray
+    $currentPath = (Get-Location).Path
+    $demoResolvedPath = (Resolve-Path $demoPath).Path
+
+        if ($currentPath.StartsWith($demoResolvedPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+            Set-Location -Path (Split-Path -Path $demoResolvedPath -Parent)
+        }
+
+        Remove-Item -LiteralPath $demoResolvedPath -Recurse -Force
+    Write-Host "[CLEANUP] Demo repository removed: $demoResolvedPath" -ForegroundColor Gray
     } catch {
         Write-Host "[CLEANUP] Note: Demo files may remain at: $demoPath" -ForegroundColor Yellow
     }
+}
+
+try {
+    if ($originalLocation) {
+    Set-Location -Path $originalLocation
+    Write-Host "[CLEANUP] Restored working directory: $originalLocation" -ForegroundColor Gray
+    }
+} catch {
+    Write-Host "[CLEANUP] Unable to restore working directory: $originalLocation" -ForegroundColor Yellow
 }
 
 Write-Host "[WORKSHOP COMPLETE] Git Integration & Source Control - PowerShell DevOps with Azure Automation" -ForegroundColor Green

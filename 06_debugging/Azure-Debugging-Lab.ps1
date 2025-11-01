@@ -6,8 +6,38 @@
 #   cd path/to/PSCode
 #   .\06_debugging\Azure-Debugging-Lab.ps1
 #
-# Prerequisites: Azure PowerShell module installed and authenticated Azure session
+# Prerequisites: PowerShell 5.1+, Az PowerShell module, AzCLI, Git, authenticated Azure session
 # ==============================================================================================
+
+# ==============================================================================================
+# PREREQUISITE CHECK: PowerShell Version
+# ==============================================================================================
+Write-Host "[CHECK] Verifying PowerShell version..." -ForegroundColor Cyan
+$psVersion = $PSVersionTable.PSVersion
+Write-Host "[INFO] PowerShell version detected: $($psVersion.ToString())" -ForegroundColor Gray
+
+if ($psVersion.Major -lt 5 -or ($psVersion.Major -eq 5 -and $psVersion.Minor -lt 1)) {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                   POWERSHELL VERSION NOT SUPPORTED                            ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "This workshop requires PowerShell 5.1 or later." -ForegroundColor Yellow
+    Write-Host "Current version detected: PowerShell $($psVersion.ToString())" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "Install PowerShell 7 (recommended) with: winget install Microsoft.PowerShell" -ForegroundColor Green
+    Write-Host ""
+    exit 1
+}
+elseif ($psVersion.Major -eq 5 -and $psVersion.Minor -eq 1) {
+    Write-Host "[SUCCESS] PowerShell 5.1 detected - core features available" -ForegroundColor Green
+    Write-Host "[INFO] PowerShell 7+ recommended for best experience" -ForegroundColor Cyan
+}
+else {
+    Write-Host "[SUCCESS] PowerShell 7+ detected - all features available!" -ForegroundColor Green
+}
+
+Write-Host ""
 
 # ==============================================================================================
 # PREREQUISITE CHECK: Azure PowerShell Module
@@ -36,58 +66,161 @@ if (-not $azModule) {
 }
 
 Write-Host "[SUCCESS] Azure PowerShell module found!" -ForegroundColor Green
-Write-Host ""
 
+Write-Host "[CHECK] Verifying Azure CLI..." -ForegroundColor Cyan
+try {
+    $azCliVersion = az version 2>$null | ConvertFrom-Json
+    Write-Host "[SUCCESS] Azure CLI found - Version: $($azCliVersion.'azure-cli')" -ForegroundColor Green
+}
+catch {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                      AZURE CLI NOT INSTALLED                                  ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Azure CLI is required for this workshop." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To install Azure CLI, visit: https://learn.microsoft.com/cli/azure/install-azure-cli" -ForegroundColor Cyan
+    Write-Host "Or use winget: winget install Microsoft.AzureCLI" -ForegroundColor Green
+    Write-Host ""
+    exit 1
+}
+
+Write-Host ""
+Write-Host "[CHECK] Verifying Git installation..." -ForegroundColor Cyan
+try {
+    $gitVersionOutput = git --version 2>$null
+    if (-not [string]::IsNullOrWhiteSpace($gitVersionOutput)) {
+        Write-Host "[SUCCESS] Git found - $gitVersionOutput" -ForegroundColor Green
+    }
+    else {
+        throw "Git not found"
+    }
+}
+catch {
+    Write-Host ""
+    Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+    Write-Host "║                          GIT NOT INSTALLED                                    ║" -ForegroundColor Red
+    Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Git is required for the hands-on exercises." -ForegroundColor Yellow
+    Write-Host "Install it with: winget install Git.Git" -ForegroundColor Green
+    Write-Host "More info: https://git-scm.com/downloads" -ForegroundColor Gray
+    Write-Host ""
+    exit 1
+}
+
+Write-Host ""
+Write-Host "[CHECK] Verifying Azure authentication..." -ForegroundColor Cyan
+try {
+    $azContext = Get-AzContext -ErrorAction SilentlyContinue
+    if (-not $azContext) {
+        Write-Host ""
+        Write-Host "╔════════════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+        Write-Host "║                      AZURE NOT AUTHENTICATED                                  ║" -ForegroundColor Red
+        Write-Host "╚════════════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+        Write-Host ""
+        Write-Host "You need to authenticate with Azure first." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "Run one of these commands to authenticate:" -ForegroundColor Cyan
+        Write-Host "    Connect-AzAccount                    # Interactive login" -ForegroundColor Green
+        Write-Host "    az login                             # Azure CLI login" -ForegroundColor Green
+        Write-Host ""
+        Write-Host "After authentication completes, run this script again." -ForegroundColor Cyan
+        Write-Host ""
+        exit 1
+    }
+
+    Write-Host "[SUCCESS] Azure authentication verified!" -ForegroundColor Green
+    Write-Host "[INFO] Current subscription: $($azContext.Subscription.Name)" -ForegroundColor Gray
+    Write-Host "[INFO] Subscription ID: $($azContext.Subscription.Id)" -ForegroundColor Gray
+    Write-Host "[INFO] Tenant: $($azContext.Tenant.Id)" -ForegroundColor Gray
+}
+catch {
+    Write-Host "[ERROR] Failed to check Azure authentication: $_" -ForegroundColor Red
+    Write-Host "Please ensure Azure PowerShell module is properly installed and try again." -ForegroundColor Yellow
+    exit 1
+}
+
+Write-Host ""
 Write-Host "[INFO] Starting PowerShell Debugging Workshop..." -ForegroundColor Cyan
 Write-Host "[INFO] Initializing Azure connection..." -ForegroundColor Gray
 
 # Enhanced Azure connection with automatic login and subscription selection
 function Initialize-AzureConnection {
-    param([string]$PreferredSubscriptionId = $null)
-    
+    [CmdletBinding()]
+    param(
+        [string]$PreferredSubscriptionId = $null
+    )
+
     try {
         $context = Get-AzContext -ErrorAction SilentlyContinue
-        
+
         if (-not $context) {
             Write-Host "[CONNECT] Starting Azure authentication..." -ForegroundColor Yellow
             Connect-AzAccount -ErrorAction Stop | Out-Null
             Write-Host "[SUCCESS] Successfully logged in to Azure!" -ForegroundColor Green
-        } else {
+        }
+        else {
             Write-Host "[CONNECTED] Already logged in as: $($context.Account.Id)" -ForegroundColor Green
         }
-        
-        $subscriptions = Get-AzSubscription | Where-Object { $_.State -eq "Enabled" }
-        if (-not $subscriptions) { throw "No enabled Azure subscriptions found." }
-        
-        if ($subscriptions.Count -eq 1) {
-            $selectedSubscription = $subscriptions[0]
-            Write-Host "[AUTO] Using subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
-        } else {
-            Write-Host "[CHOICE] Multiple subscriptions available:" -ForegroundColor Yellow
-            for ($i = 0; $i -lt $subscriptions.Count; $i++) {
-                Write-Host "  [$($i + 1)] $($subscriptions[$i].Name)" -ForegroundColor Gray
-            }
-            
-            do {
-                $choice = Read-Host "Select subscription (1-$($subscriptions.Count)) or press Enter for default"
-                if ([string]::IsNullOrWhiteSpace($choice)) {
-                    $selectedSubscription = $subscriptions[0]
-                    break
-                } elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $subscriptions.Count) {
-                    $selectedSubscription = $subscriptions[[int]$choice - 1]
-                    break
-                } else {
-                    Write-Host "[ERROR] Invalid choice. Try again." -ForegroundColor Red
-                }
-            } while ($true)
+
+        $subscriptions = Get-AzSubscription | Where-Object { $_.State -eq "Enabled" } | Sort-Object Name
+        if (-not $subscriptions) {
+            throw "No enabled Azure subscriptions found."
         }
-        
-        Set-AzContext -SubscriptionId $selectedSubscription.Id | Out-Null
-        Write-Host "[SUCCESS] Ready to demonstrate debugging!" -ForegroundColor Green
+
+        $selectedSubscription = $null
+
+        if ($PreferredSubscriptionId) {
+            $selectedSubscription = $subscriptions | Where-Object {
+                $_.Id -eq $PreferredSubscriptionId -or $_.SubscriptionId -eq $PreferredSubscriptionId
+            } | Select-Object -First 1
+
+            if ($selectedSubscription) {
+                Write-Host "[PREFERRED] Using specified subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+            }
+        }
+
+        if (-not $selectedSubscription) {
+            if ($subscriptions.Count -eq 1) {
+                $selectedSubscription = $subscriptions[0]
+                Write-Host "[AUTO] Using only available subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+            }
+            else {
+                Write-Host "[CHOICE] Multiple subscriptions available:" -ForegroundColor Yellow
+                for ($i = 0; $i -lt $subscriptions.Count; $i++) {
+                    $sub = $subscriptions[$i]
+                    Write-Host "  [$($i + 1)] $($sub.Name) ($($sub.Id))" -ForegroundColor Gray
+                }
+
+                do {
+                    $choice = Read-Host "Select subscription (1-$($subscriptions.Count)) or press Enter for default"
+                    if ([string]::IsNullOrWhiteSpace($choice)) {
+                        $selectedSubscription = $subscriptions[0]
+                        Write-Host "[DEFAULT] Using first subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+                        break
+                    }
+                    elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $subscriptions.Count) {
+                        $selectedSubscription = $subscriptions[[int]$choice - 1]
+                        Write-Host "[SELECTED] Using subscription: $($selectedSubscription.Name)" -ForegroundColor Cyan
+                        break
+                    }
+                    else {
+                        Write-Host "[ERROR] Invalid choice. Please enter a number between 1 and $($subscriptions.Count)" -ForegroundColor Red
+                    }
+                } while ($true)
+            }
+        }
+
+        Set-AzContext -SubscriptionId $selectedSubscription.Id -TenantId $selectedSubscription.TenantId | Out-Null
+        Write-Host "[CONTEXT] Subscription context set successfully" -ForegroundColor Green
+
         return $selectedSubscription
-        
-    } catch {
+    }
+    catch {
         Write-Host "[ERROR] Azure connection failed: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[HELP] Ensure Azure PowerShell module is installed and you have active subscription access." -ForegroundColor Yellow
         exit 1
     }
 }
