@@ -626,6 +626,158 @@ else {
     Write-Host "  [INFO] ForEach-Object -Parallel requires PowerShell 7 or later (this is PS $($PSVersionTable.PSVersion.Major))" -ForegroundColor Gray
 }
 
+Write-Host "`n[DEMO 7C] Real-World Azure Scenario - Ordered Parallel Resource Group Processing" -ForegroundColor Yellow
+Write-Host "Pattern: Maintain original order despite parallel execution times using hashtables" -ForegroundColor Gray
+
+if ($PSVersionTable.PSVersion.Major -ge 7 -and $global:AzureEnabled) {
+    try {
+        Write-Host "  [STEP 1] Getting all Resource Groups from your Azure subscription..." -ForegroundColor Gray
+        $resourceGroups = Get-AzResourceGroup | Select-Object ResourceGroupName, Location | Sort-Object ResourceGroupName
+        
+        if ($resourceGroups.Count -eq 0) {
+            Write-Host "    [INFO] No resource groups found in current subscription" -ForegroundColor Yellow
+            Write-Host "    [SUGGESTION] Create some resource groups to see this demo in action" -ForegroundColor Yellow
+            Write-Host "    [COMMAND] az group create --name 'rg-demo-test' --location 'East US'" -ForegroundColor Gray
+            return
+        }
+        
+        Write-Host "    [SUCCESS] Found $($resourceGroups.Count) resource groups in subscription" -ForegroundColor Green
+        
+        Write-Host "  [BASELINE] Original Resource Groups (in order):" -ForegroundColor White
+        $resourceGroups | ForEach-Object { $index = 0 } { 
+            $index++
+            Write-Host "    $index. $($_.ResourceGroupName) ($($_.Location))" -ForegroundColor Gray 
+        }
+        
+        Write-Host "`n  [STEP 2] Parallel Resource Count with Order Preservation..." -ForegroundColor Gray
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        
+        # Create ordered results using hashtable with index tracking
+        $parallelResults = $resourceGroups | ForEach-Object { $index = 0 } {
+            $index++
+            [PSCustomObject]@{
+                Index = $index
+                ResourceGroupName = $_.ResourceGroupName
+                Location = $_.Location
+            }
+        } | ForEach-Object -Parallel {
+            Write-Host "      [PARALLEL] Processing $($_.ResourceGroupName)..." -ForegroundColor DarkGray
+            
+            # Real Azure API call to get resource count
+            try {
+                $startTime = Get-Date
+                $actualCount = (Get-AzResource -ResourceGroupName $_.ResourceGroupName -ErrorAction Stop).Count
+                $endTime = Get-Date
+                $executionTime = ($endTime - $startTime).TotalMilliseconds
+                
+                Write-Host "      [COMPLETED] $($_.ResourceGroupName): $actualCount resources ($([math]::Round($executionTime))ms)" -ForegroundColor Green
+                
+                # Return structured result with original index for ordering
+                [PSCustomObject]@{
+                    Index = $_.Index
+                    ResourceGroupName = $_.ResourceGroupName
+                    Location = $_.Location
+                    ResourceCount = $actualCount
+                    ProcessedAt = Get-Date -Format "HH:mm:ss.fff"
+                    ExecutionTime = [math]::Round($executionTime)
+                    Status = "Success"
+                }
+            }
+            catch {
+                Write-Host "      [ERROR] Failed to process $($_.ResourceGroupName): $($_.Exception.Message)" -ForegroundColor Red
+                
+                [PSCustomObject]@{
+                    Index = $_.Index
+                    ResourceGroupName = $_.ResourceGroupName
+                    Location = $_.Location
+                    ResourceCount = -1
+                    Error = $_.Exception.Message
+                    ProcessedAt = Get-Date -Format "HH:mm:ss.fff"
+                    ExecutionTime = 0
+                    Status = "Error"
+                }
+            }
+        } -ThrottleLimit 5
+        
+        $sw.Stop()
+        
+        Write-Host "`n  [STEP 3] Results Processing and Order Restoration..." -ForegroundColor Gray
+        
+        # Create hashtable for fast lookup by index
+        $resultLookup = @{}
+        foreach ($result in $parallelResults) {
+            $resultLookup[$result.Index] = $result
+        }
+        
+        Write-Host "`n  [RESULTS] Ordered Resource Group Analysis (maintained original sequence):" -ForegroundColor White
+        Write-Host "  " -NoNewline
+        Write-Host "Index".PadRight(7) -ForegroundColor Cyan -NoNewline
+        Write-Host "ResourceGroup".PadRight(35) -ForegroundColor Cyan -NoNewline
+        Write-Host "Location".PadRight(18) -ForegroundColor Cyan -NoNewline
+        Write-Host "Count".PadRight(8) -ForegroundColor Cyan -NoNewline
+        Write-Host "Time".PadRight(15) -ForegroundColor Cyan -NoNewline
+        Write-Host "ExecTime(ms)" -ForegroundColor Cyan
+        Write-Host "  " + ("-" * 100) -ForegroundColor DarkGray
+        
+        # Display results in original order using index
+        1..$resourceGroups.Count | ForEach-Object {
+            $result = $resultLookup[$_]
+            if ($result.Status -eq "Error") {
+                $countColor = "Red"
+                $displayCount = "ERROR"
+            } else {
+                $countColor = if ($result.ResourceCount -gt 10) { "Red" } elseif ($result.ResourceCount -gt 5) { "Yellow" } else { "Green" }
+                $displayCount = $result.ResourceCount.ToString()
+            }
+            
+            # Truncate long RG names for better formatting
+            $displayName = if ($result.ResourceGroupName.Length -gt 32) { 
+                $result.ResourceGroupName.Substring(0, 29) + "..." 
+            } else { 
+                $result.ResourceGroupName 
+            }
+            
+            Write-Host "  " -NoNewline
+            Write-Host "$($_)".PadRight(7) -ForegroundColor White -NoNewline
+            Write-Host "$displayName".PadRight(35) -ForegroundColor Gray -NoNewline
+            Write-Host "$($result.Location)".PadRight(18) -ForegroundColor Gray -NoNewline
+            Write-Host "$displayCount".PadRight(8) -ForegroundColor $countColor -NoNewline
+            Write-Host "$($result.ProcessedAt)".PadRight(15) -ForegroundColor Gray -NoNewline
+            Write-Host "$($result.ExecutionTime)" -ForegroundColor Gray
+        }
+        
+        Write-Host "`n  [PERFORMANCE] Total parallel execution time: $($sw.ElapsedMilliseconds) ms" -ForegroundColor Green
+        
+        $successfulResults = $parallelResults | Where-Object { $_.Status -eq "Success" }
+        if ($successfulResults.Count -gt 0) {
+            $sequentialTime = ($successfulResults | Measure-Object ExecutionTime -Sum).Sum
+            Write-Host "  [COMPARISON] Sequential execution would have taken: $sequentialTime ms" -ForegroundColor Yellow
+            
+            if ($sequentialTime -gt 0) {
+                $speedup = [math]::Round(($sequentialTime / $sw.ElapsedMilliseconds), 2)
+                Write-Host "  [SPEEDUP] Parallel processing was ${speedup}x faster!" -ForegroundColor Green
+            }
+        }
+        
+        $totalResources = ($successfulResults | Measure-Object ResourceCount -Sum).Sum
+        Write-Host "  [SUMMARY] Total resources across all RGs: $totalResources" -ForegroundColor Cyan
+        
+        Write-Host "`n  [KEY TECHNIQUE] Hashtable lookup preserves order despite async completion times" -ForegroundColor Cyan
+        Write-Host "  [PATTERN] Index tracking + result lookup = ordered parallel processing" -ForegroundColor Cyan
+        
+    }
+    catch {
+        Write-Host "  [ERROR] Azure Resource Group enumeration failed: $_" -ForegroundColor Red
+        Write-Host "  [INFO] Ensure you're authenticated with Connect-AzAccount" -ForegroundColor Yellow
+    }
+}
+elseif ($PSVersionTable.PSVersion.Major -lt 7) {
+    Write-Host "  [INFO] This demo requires PowerShell 7+ for ForEach-Object -Parallel" -ForegroundColor Yellow
+}
+else {
+    Write-Host "  [INFO] Azure demos disabled - enable with Azure integration option" -ForegroundColor Yellow
+}
+
 Write-Host "[SUCCESS] PowerShell 7 modern alternatives demonstrated" -ForegroundColor Green
 
 Write-Host "`n[PAUSE] Press Enter to continue to best practices summary..." -ForegroundColor Magenta
